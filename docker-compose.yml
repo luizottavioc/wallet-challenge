@@ -1,0 +1,43 @@
+services:
+  wallet-challenge:
+    container_name: wallet-challenge-app
+    image: wallet-challenge
+    build:
+      context: .
+    entrypoint: ["sh", "./entrypoint.sh"]
+    volumes:
+      - ./:/opt/www
+    ports:
+      - "9501:9501"
+    networks:
+      - wallet-challenge
+
+  mysql:
+    image: mysql:8
+    container_name: wallet-challenge-mysql
+    restart: always
+    volumes:
+      - .docker/mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - wallet-challenge
+
+  redis:
+    image: redis
+    container_name: wallet-challenge-redis
+    restart: always
+    volumes:
+      - .docker/redis:/data
+    ports:
+      - "6381:6379"
+    networks:
+      - wallet-challenge
+
+networks:
+  wallet-challenge:
+    name: wallet-challenge
+    driver: bridge
