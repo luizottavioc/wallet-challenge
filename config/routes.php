@@ -11,6 +11,18 @@ declare(strict_types=1);
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
 
+use App\Infrastructure\Controller\AuthController;
+use App\Infrastructure\Middleware\AuthMiddleware;
 use Hyperf\HttpServer\Router\Router;
+use Hyperf\Validation\Middleware\ValidationMiddleware;
 
-Router::get('/ping', fn () => 'pong');
+Router::get('/ping', fn() => 'pong');
+
+Router::addGroup('', function () {
+    Router::addGroup('/auth', function () {
+        Router::post('/login', [AuthController::class, 'login']);
+    });
+}, [
+    'middleware' => [AuthMiddleware::class, ValidationMiddleware::class]
+]);
+

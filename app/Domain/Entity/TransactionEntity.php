@@ -6,14 +6,44 @@ namespace App\Domain\Entity;
 
 use App\Domain\Enum\TransactionStatusEnum;
 
-final class TransactionEntity
+final readonly class TransactionEntity
 {
     public function __construct(
-        private readonly string|int $id,
-        private readonly string|int $payerId,
-        private readonly string|int $payeeId,
-        private readonly int $amount,
-        private readonly TransactionStatusEnum $status,
-        private readonly int $processedAt
+        private string|int $id,
+        private string|int $payerId,
+        private string|int $payeeId,
+        private int $amount,
+        private TransactionStatusEnum $status,
+        private int $processedAt
     ) {}
+
+    public function getId(): int|string
+    {
+        return $this->id;
+    }
+
+    public function getPayerId(): int|string
+    {
+        return $this->payerId;
+    }
+
+    public function getPayeeId(): int|string
+    {
+        return $this->payeeId;
+    }
+
+    public function getAmount(): int
+    {
+        return $this->amount;
+    }
+
+    public function getStatus(): TransactionStatusEnum
+    {
+        return $this->status;
+    }
+
+    public function getProcessedAt(): int
+    {
+        return $this->processedAt;
+    }
 }
