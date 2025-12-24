@@ -1,5 +1,6 @@
 <?php
 
+use App\Domain\Enum\TransactionStatusEnum;
 use Hyperf\Database\Schema\Schema;
 use Hyperf\Database\Schema\Blueprint;
 use Hyperf\Database\Migrations\Migration;
@@ -18,10 +19,9 @@ return new class extends Migration
             $table->unsignedBigInteger('payee_id')->index();
             $table->foreign('payee_id')->references('id')->on('users');
             $table->unsignedBigInteger('amount');
-            $table->string('status')->default(''); // todo: enum
+            $table->string('status')->default(TransactionStatusEnum::PENDING->value);
             $table->timestamp('created_at');
             $table->timestamp('processed_at')->nullable();
-
 
             $table->index(['payer_id', 'processed_at']);
             $table->index(['payee_id', 'processed_at']);

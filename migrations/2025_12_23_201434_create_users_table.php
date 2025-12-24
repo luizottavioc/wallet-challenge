@@ -1,5 +1,6 @@
 <?php
 
+use App\Domain\Enum\UserTypeEnum;
 use Hyperf\Database\Schema\Schema;
 use Hyperf\Database\Schema\Blueprint;
 use Hyperf\Database\Migrations\Migration;
@@ -15,10 +16,10 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('cpf')->unique();
-            $table->string('cnpj')->unique();
+            $table->string('cpf')->nullable()->unique();
+            $table->string('cnpj')->nullable()->unique();
             $table->string('password');
-            $table->string('type')->default(''); // todo: enum
+            $table->string('type')->default(UserTypeEnum::DEFAULT->value);
             $table->datetimes();
             $table->softDeletes();
 
