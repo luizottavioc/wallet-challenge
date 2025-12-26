@@ -18,11 +18,13 @@ use Hyperf\Validation\Middleware\ValidationMiddleware;
 
 Router::get('/ping', fn() => 'pong');
 
-Router::addGroup('', function () {
-    Router::addGroup('/auth', function () {
-        Router::post('/login', [AuthController::class, 'login']);
-    });
+Router::addGroup('/auth', function () {
+    Router::post('/login', [AuthController::class, 'login']);
 }, [
+    'middleware' => [ValidationMiddleware::class]
+]);
+
+Router::addGroup('', function () {}, [
     'middleware' => [AuthMiddleware::class, ValidationMiddleware::class]
 ]);
 

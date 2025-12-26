@@ -5,18 +5,21 @@ declare(strict_types=1);
 namespace App\Infrastructure\Trait;
 
 use App\Infrastructure\Enum\HttpCodesEnum;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 trait HttpResponseTrait
 {
+    private RequestInterface $request;
+    private ResponseInterface $response;
+
     public function responseSuccess(
-        ResponseInterface $response,
         HttpCodesEnum $statusCode,
         string $message,
         array $data = []
     ): ResponseInterface
     {
-        return $response->json([
+        return $this->response->json([
             'message' => $message,
             'data' => $data
         ])
@@ -24,12 +27,11 @@ trait HttpResponseTrait
     }
 
     public function responseError(
-        ResponseInterface $response,
         HttpCodesEnum $statusCode,
         string $errorMessage
     ): ResponseInterface
     {
-        return $response->json(['message' => $errorMessage])
+        return $this->response->json(['message' => $errorMessage])
             ->withStatus($statusCode->value);
     }
 }
