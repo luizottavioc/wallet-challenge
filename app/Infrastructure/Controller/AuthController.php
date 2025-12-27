@@ -4,20 +4,26 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Controller;
 
+use App\Application\Exception\GenericLoginException;
 use App\Application\UseCase\LoginUseCase;
 use App\Infrastructure\Enum\HttpCodesEnum;
 use App\Infrastructure\Request\LoginRequest;
-use App\Infrastructure\Trait\HttpResponseTrait;
-use Psr\Http\Message\ResponseInterface;
+use Hyperf\HttpServer\Contract\RequestInterface;
+use Hyperf\HttpServer\Contract\ResponseInterface;
 
-class AuthController
+class AuthController extends AbstractController
 {
-    use HttpResponseTrait;
-
     public function __construct(
+        RequestInterface $request,
+        ResponseInterface $response,
         protected LoginUseCase $loginUseCase
-    ) {}
+    ) {
+        parent::__construct($request, $response);
+    }
 
+    /**
+     * @throws GenericLoginException
+     */
     public function login(LoginRequest $loginRequest): ResponseInterface
     {
         $loginInputDto = $loginRequest->getLoginInputDto();

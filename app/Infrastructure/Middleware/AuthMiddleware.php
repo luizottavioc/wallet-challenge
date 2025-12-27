@@ -78,10 +78,10 @@ class AuthMiddleware implements MiddlewareInterface
 
     private function setTokenInfoOnContext(string $token): void
     {
-        $authEntity = $this->authenticator->decodeTokenToAuthEntity($token);
+        $authEntity = $this->authenticator->decodeToken($token);
 
         Context::set('auth.user_id', $authEntity->getUserId());
         Context::set('auth.user_type', $authEntity->getUserType());
-        Context::set('auth.token', $authEntity->getOriginalToken());
+        Context::set('auth.token', $authEntity->getToken());
     }
 }

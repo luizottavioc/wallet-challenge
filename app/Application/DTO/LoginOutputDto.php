@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\DTO;
 
-class LoginOutputDto
+final readonly class LoginOutputDto
 {
     public function __construct(
         public string $token,

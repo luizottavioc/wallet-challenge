@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Entity;
+namespace App\Application\DTO;
 
 use App\Domain\Enum\UserTypeEnum;
 
-final readonly class AuthEntity
+final readonly class AccessTokenDto
 {
     public function __construct(
-        private string $originalToken,
+        private string $token,
         private string|int $userId,
         private UserTypeEnum $userType,
         private int $createdAt,
         private int $expiresAt,
     ) {}
 
-    public function getOriginalToken(): string
+    public function getToken(): string
     {
-        return $this->originalToken;
+        return $this->token;
     }
 
     public function getUserId(): int|string

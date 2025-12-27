@@ -20,7 +20,7 @@ use Hyperf\Testing\TestCase;
  */
 class AuthTest extends TestCase
 {
-    public function testLogin()
+    public function testLoginSuccessfully()
     {
         $this->json( '/auth/login', [
             'email' => 'user@example.com',

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Domain\Entity;
 
+use App\Domain\Contract\Service\PasswordHasherInterface;
 use App\Domain\Enum\UserTypeEnum;
+use App\Domain\Exception\InvalidPasswordException;
 
 final readonly class UserEntity
 {
@@ -14,6 +16,7 @@ final readonly class UserEntity
         private string $email,
         private string|null $cpf,
         private string|null $cnpj,
+        private string $password,
         private UserTypeEnum $type
     ) {}
 
@@ -22,28 +25,23 @@ final readonly class UserEntity
         return $this->id;
     }
 
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
     public function getEmail(): string
     {
         return $this->email;
     }
 
-    public function getCpf(): ?string
-    {
-        return $this->cpf;
-    }
-
-    public function getCnpj(): ?string
-    {
-        return $this->cnpj;
-    }
-
     public function getType(): UserTypeEnum
     {
         return $this->type;
+    }
+
+    /**
+     * @throws InvalidPasswordException
+     */
+    public function verifyPassword(string $plainPassword, PasswordHasherInterface $hasher): void
+    {
+        if (!$hasher->check($plainPassword, $this->password)) {
+            throw new InvalidPasswordException();
+        }
     }
 }

@@ -2,10 +2,14 @@
 
 namespace App\Application\Contract;
 
-use App\Domain\Entity\AuthEntity;
+use App\Application\DTO\AccessTokenDto;
+use App\Domain\Entity\UserEntity;
 
 interface AuthenticatorInterface
 {
+    public function generateToken(UserEntity $user): AccessTokenDto;
+
     public function tokenIsValid(string $token): bool;
-    public function decodeTokenToAuthEntity(string $token): AuthEntity;
+
+    public function decodeToken(string $token): AccessTokenDto;
 }

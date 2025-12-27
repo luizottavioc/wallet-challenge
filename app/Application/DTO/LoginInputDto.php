@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\DTO;
 
-class LoginInputDto
+final readonly class LoginInputDto
 {
     public function __construct(
         public string $email,

@@ -15,6 +15,7 @@ enum HttpCodesEnum: int
     case UNAUTHORIZED = 401;
     case FORBIDDEN = 403;
     case NOT_FOUND = 404;
+    case UNPROCESSABLE_ENTITY = 422;
     case TOO_MANY_REQUESTS = 429;
 
     case INTERNAL_SERVER_ERROR = 500;

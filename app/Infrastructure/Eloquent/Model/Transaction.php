@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Model;
+namespace App\Infrastructure\Eloquent\Model;
 
 use Hyperf\DbConnection\Model\Model;
 
