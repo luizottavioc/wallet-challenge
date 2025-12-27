@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('cnpj')->nullable()->unique();
             $table->string('password');
             $table->string('type')->default(UserTypeEnum::DEFAULT->value);
-            $table->datetimes();
+            $table->timestamps();
             $table->softDeletes();
 
             $table->index('email');

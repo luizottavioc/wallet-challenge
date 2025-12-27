@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Eloquent\Model;
 
+use Hyperf\Database\Model\SoftDeletes;
 use Hyperf\DbConnection\Model\Model;
 
 /**
@@ -17,6 +18,8 @@ use Hyperf\DbConnection\Model\Model;
  */
 class Transaction extends Model
 {
+    use SoftDeletes;
+
     /**
      * The table associated with the model.
      */
@@ -44,4 +47,6 @@ class Transaction extends Model
         'created_at' => 'timestamp',
         'processed_at' => 'timestamp'
     ];
+
+    protected ?string $dateFormat = 'Y-m-d H:i:s.u';
 }

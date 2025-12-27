@@ -30,7 +30,7 @@ class UserShopkeeperSeeder extends Seeder
             'type' => UserTypeEnum::SHOPKEEPER->value,
         ]);
 
-        echo "Default user created!\n";
+        echo "Shopkeeper user created:\n";
         echo "- Email: $email\n";
         echo "- Password: $password\n";
     }

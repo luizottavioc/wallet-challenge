@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Eloquent\Model;
 
+use Hyperf\Database\Model\SoftDeletes;
 use Hyperf\DbConnection\Model\Model;
 
 /**
@@ -14,6 +15,8 @@ use Hyperf\DbConnection\Model\Model;
  */
 class Wallet extends Model
 {
+    use SoftDeletes;
+
     /**
      * The table associated with the model.
      */
@@ -38,5 +41,5 @@ class Wallet extends Model
         'processed_at' => 'timestamp'
     ];
 
-    public bool $timestamps = false;
+    protected ?string $dateFormat = 'Y-m-d H:i:s.u';
 }

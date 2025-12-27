@@ -20,11 +20,12 @@ return new class extends Migration
             $table->foreign('payee_id')->references('id')->on('users');
             $table->unsignedBigInteger('amount');
             $table->string('status')->default(TransactionStatusEnum::PENDING->value);
-            $table->timestamp('created_at');
-            $table->timestamp('processed_at')->nullable();
+            $table->timestamp('processed_at', 6)->nullable();
+            $table->timestamps(6);
+            $table->softDeletes('deleted_at', 6);
 
-            $table->index(['payer_id', 'processed_at']);
-            $table->index(['payee_id', 'processed_at']);
+            $table->index(['payer_id', 'processed_at', 'deleted_at']);
+            $table->index(['payee_id', 'processed_at', 'deleted_at']);
             $table->index('status');
         });
     }

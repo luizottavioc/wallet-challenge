@@ -9,7 +9,7 @@ FROM hyperf/hyperf:8.3-alpine-v3.19-swoole
 
 ARG timezone
 
-ENV TIMEZONE=${timezone:-"America/Sao_Paulo"}
+ENV TIMEZONE=${timezone:-"UTC"}
 
 # update
 RUN set -ex \
