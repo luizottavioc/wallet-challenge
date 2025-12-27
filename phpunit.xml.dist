@@ -1,16 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" backupGlobals="false" bootstrap="./test/bootstrap.php" colors="true" processIsolation="false" stopOnFailure="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd" cacheDirectory=".phpunit.cache" backupStaticProperties="false">
-  <testsuites>
-    <testsuite name="Tests">
-      <directory suffix="Test.php">./test</directory>
-    </testsuite>
-  </testsuites>
-  <php>
-    <env name="APP_ENV" value="testing" force="true"/>
-  </php>
-  <source>
-    <include>
-      <directory suffix=".php">./app</directory>
-    </include>
-  </source>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" backupGlobals="false" bootstrap="./test/bootstrap.php"
+         colors="true" processIsolation="false" stopOnFailure="false"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd" cacheDirectory=".phpunit.cache"
+         backupStaticProperties="false">
+    <testsuites>
+        <testsuite name="Tests">
+            <directory suffix="Test.php">./test</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="APP_ENV" value="testing" force="true"/>
+    </php>
+    <source>
+        <include>
+            <directory suffix=".php">./app</directory>
+        </include>
+    </source>
+    <coverage includeUncoveredFiles="true" pathCoverage="false" ignoreDeprecatedCodeUnits="true"
+              disableCodeCoverageIgnore="false">
+        <report>
+            <html outputDirectory="test/coverage/html" lowUpperBound="50" highLowerBound="90"/>
+            <clover outputFile="test/coverage/clover.xml"/>
+            <text outputFile="test/coverage/coverage.txt" showUncoveredFiles="false" showOnlySummary="true"/>
+            <cobertura outputFile="test/coverage/cobertura.xml"/>
+            <crap4j outputFile="test/coverage/crap4j.xml" threshold="50"/>
+            <php outputFile="test/coverage/coverage.php"/>
+        </report>
+    </coverage>
+    <logging>
+        <junit outputFile="test/coverage/junit.xml"/>
+        <teamcity outputFile="test/coverage/teamcity.txt"/>
+    </logging>
 </phpunit>

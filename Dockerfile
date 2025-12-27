@@ -13,18 +13,24 @@ ENV TIMEZONE=${timezone:-"America/Sao_Paulo"}
 
 # update
 RUN set -ex \
-    # show php version and extensions
-    && php -v \
-    && php -m \
-    && php --ri swoole \
+    && apk add --no-cache \
+       php83-dom \
+       php83-xml \
+       php83-xmlwriter \
+       php83-mbstring \
+       php83-tokenizer \
+       php83-pecl-pcov \
     #  ---------- some config ----------
     && cd /etc/php* \
     # - config PHP
     && { \
+        echo "extension=pcov.so"; \
         echo "upload_max_filesize=128M"; \
         echo "post_max_size=128M"; \
         echo "memory_limit=1G"; \
         echo "date.timezone=${TIMEZONE}"; \
+        echo "pcov.enabled=1"; \
+        echo "pcov.directory=/opt/www/app"; \
     } | tee conf.d/99_overrides.ini \
     # - config timezone
     && ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
