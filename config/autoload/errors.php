@@ -12,7 +12,9 @@ declare(strict_types=1);
 
 use App\Application\Exception\GenericLoginException;
 use App\Infrastructure\Enum\HttpCodesEnum;
+use App\Infrastructure\Exception\InvalidTokenException;
 
 return [
+    InvalidTokenException::class => HttpCodesEnum::UNAUTHORIZED,
     GenericLoginException::class => HttpCodesEnum::UNPROCESSABLE_ENTITY,
 ];

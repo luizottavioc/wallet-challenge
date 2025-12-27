@@ -12,6 +12,7 @@ declare(strict_types=1);
  */
 
 use App\Infrastructure\Controller\AuthController;
+use App\Infrastructure\Controller\TransferController;
 use App\Infrastructure\Middleware\AuthMiddleware;
 use Hyperf\HttpServer\Router\Router;
 use Hyperf\Validation\Middleware\ValidationMiddleware;
@@ -24,7 +25,9 @@ Router::addGroup('/auth', function () {
     'middleware' => [ValidationMiddleware::class]
 ]);
 
-Router::addGroup('', function () {}, [
+Router::addGroup('/transfer', function () {
+    Router::post('', [TransferController::class, 'transfer']);
+}, [
     'middleware' => [AuthMiddleware::class, ValidationMiddleware::class]
 ]);
 

@@ -17,6 +17,7 @@ use App\Infrastructure\Enum\HttpCodesEnum;
 use App\Infrastructure\Trait\HttpResponseTrait;
 use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\ExceptionHandler\ExceptionHandler;
+use Hyperf\HttpMessage\Exception\HttpException;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use function Hyperf\Config\config;
@@ -57,10 +58,16 @@ class AppExceptionHandler extends ExceptionHandler
      */
     private function resolveMessageAndStatusCodeByThrowable(Throwable $throwable): array
     {
-        $errorsMap = config('errors', []);
-        $throwableClass = get_class($throwable);
+        if ($throwable instanceof HttpException) {
+            return [
+                $throwable->getMessage(),
+                HttpCodesEnum::from($throwable->getStatusCode())
+            ];
+        }
 
-        $mappedThrowable = $errorsMap[$throwableClass] ?? null;
+        $errorsMap = config('errors', []);
+        $mappedThrowable = $errorsMap[get_class($throwable)] ?? null;
+
         if (!$throwable instanceof AbstractException || !$mappedThrowable instanceof HttpCodesEnum) {
             return [
                 AbstractException::CUSTOM_MESSAGE,

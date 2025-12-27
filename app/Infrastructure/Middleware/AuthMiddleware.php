@@ -7,8 +7,7 @@ namespace App\Infrastructure\Middleware;
 use App\Application\Contract\AuthenticatorInterface;
 use App\Infrastructure\Exception\InvalidTokenException;
 use Hyperf\Context\Context;
-use Psr\Container\ContainerInterface;
-use Psr\Http\Message\RequestInterface;
+use Hyperf\HttpServer\Contract\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -17,8 +16,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 class AuthMiddleware implements MiddlewareInterface
 {
     public function __construct(
-        protected ContainerInterface $container,
-        protected ResponseInterface $response,
         protected RequestInterface $request,
         protected AuthenticatorInterface $authenticator
     ) {}
@@ -55,7 +52,7 @@ class AuthMiddleware implements MiddlewareInterface
      */
     private function getTokenByAuthorizationHeader(string $authorization): string
     {
-        $authorizationParts = explode(' ', $authorization[0], 2);
+        $authorizationParts = explode(' ', $authorization);
         if (count($authorizationParts) !== 2 || strtolower($authorizationParts[0]) !== 'bearer') {
             throw new InvalidTokenException();
         }
