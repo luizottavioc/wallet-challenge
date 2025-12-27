@@ -8,7 +8,6 @@ use App\Infrastructure\Enum\HttpCodesEnum;
 use Hyperf\HttpMessage\Stream\SwooleStream;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
-use Swow\Psr7\Message\ResponsePlusInterface;
 
 trait HttpResponseTrait
 {
@@ -34,7 +33,7 @@ trait HttpResponseTrait
         HttpCodesEnum $statusCode,
         string $errorMessage,
         array $errors = [],
-        ?ResponsePlusInterface $withCustomResponseClass = null
+        ?PsrResponseInterface $withCustomResponseClass = null
     ): ResponseInterface|PsrResponseInterface
     {
         $response = $withCustomResponseClass ?? $this->response;
