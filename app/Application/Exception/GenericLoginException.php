@@ -9,4 +9,9 @@ use App\Domain\Exception\AbstractException;
 class GenericLoginException extends AbstractException
 {
     public const string CUSTOM_MESSAGE = 'authentication_failed';
+
+    public function getCustomMessage(): ?string
+    {
+        return self::CUSTOM_MESSAGE;
+    }
 }

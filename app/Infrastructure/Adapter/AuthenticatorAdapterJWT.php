@@ -10,6 +10,7 @@ use App\Domain\Entity\UserEntity;
 use App\Domain\Enum\UserTypeEnum;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use Throwable;
 use function Hyperf\Config\config;
 
 final class AuthenticatorAdapterJWT implements AuthenticatorInterface
@@ -52,8 +53,12 @@ final class AuthenticatorAdapterJWT implements AuthenticatorInterface
 
     public function tokenIsValid(string $token): bool
     {
-        $decodedToken = $this->decodeToken($token);
-        return $decodedToken->getExpiresAt() > time();
+        try {
+            $decodedToken = $this->decodeToken($token);
+            return $decodedToken->getExpiresAt() > time();
+        } catch (Throwable $e) {
+            return false;
+        }
     }
 
     public function decodeToken(string $token): AccessTokenDto
@@ -65,10 +70,10 @@ final class AuthenticatorAdapterJWT implements AuthenticatorInterface
 
         return new AccessTokenDto(
             token: $token,
-            userId: $decodedToken['sub'],
-            userType: UserTypeEnum::from($decodedToken['type']),
-            createdAt: $decodedToken['iat'],
-            expiresAt: $decodedToken['exp'],
+            userId: $decodedToken->sub,
+            userType: UserTypeEnum::from($decodedToken->type),
+            createdAt: $decodedToken->iat,
+            expiresAt: $decodedToken->exp,
         );
     }
 }
