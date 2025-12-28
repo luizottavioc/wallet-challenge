@@ -8,8 +8,8 @@ use App\Application\Exception\UnauthorizedTransferException;
 use App\Application\UseCase\TransferUseCase;
 use App\Domain\Exception\CannotSubtractAmountException;
 use App\Domain\Exception\InvalidValueObjectArgumentException;
-use App\Domain\Exception\UserHasNoFundsToPerformTransferException;
-use App\Domain\Exception\UserTypeCannotPerformTransferException;
+use App\Domain\Exception\CannotPerformTransferByInsufficientFundsException;
+use App\Domain\Exception\CannotPerformTransferByUserTypeException;
 use App\Infrastructure\Enum\HttpCodesEnum;
 use App\Infrastructure\Request\TransferRequest;
 use Hyperf\HttpServer\Contract\RequestInterface;
@@ -30,8 +30,8 @@ class TransferController extends AbstractController
      * @throws UnauthorizedTransferException
      * @throws CannotSubtractAmountException
      * @throws InvalidValueObjectArgumentException
-     * @throws UserHasNoFundsToPerformTransferException
-     * @throws UserTypeCannotPerformTransferException
+     * @throws CannotPerformTransferByInsufficientFundsException
+     * @throws CannotPerformTransferByUserTypeException
      */
     public function transfer(TransferRequest $transferRequest): ResponseInterface
     {

@@ -15,8 +15,8 @@ use App\Domain\Contract\Repository\WalletRepositoryInterface;
 use App\Domain\Event\TransferCompletedEvent;
 use App\Domain\Exception\CannotSubtractAmountException;
 use App\Domain\Exception\InvalidValueObjectArgumentException;
-use App\Domain\Exception\UserHasNoFundsToPerformTransferException;
-use App\Domain\Exception\UserTypeCannotPerformTransferException;
+use App\Domain\Exception\CannotPerformTransferByInsufficientFundsException;
+use App\Domain\Exception\CannotPerformTransferByUserTypeException;
 use App\Domain\Service\PerformTransactionDomainService;
 use App\Domain\Service\UpdateWalletByTransactionDomainService;
 use App\Domain\ValueObject\Money;
@@ -37,8 +37,8 @@ final readonly class TransferUseCase
      * @throws InvalidValueObjectArgumentException
      * @throws UnauthorizedTransferException
      * @throws CannotSubtractAmountException
-     * @throws UserHasNoFundsToPerformTransferException
-     * @throws UserTypeCannotPerformTransferException
+     * @throws CannotPerformTransferByInsufficientFundsException
+     * @throws CannotPerformTransferByUserTypeException
      */
     public function transfer(TransferInputDto $transferInputDto): TransferOutputDto
     {
@@ -58,8 +58,8 @@ final readonly class TransferUseCase
             $newWalletPayer = $this->updateWalletByTransactionDomainService->execute($walletPayer, $transaction);
             $this->walletRepository->save($newWalletPayer);
 
-            $walletPayee = $this->updateWalletByTransactionDomainService->execute($walletPayee, $transaction);
-            $this->walletRepository->save($walletPayee);
+            $newWalletPayee = $this->updateWalletByTransactionDomainService->execute($walletPayee, $transaction);
+            $this->walletRepository->save($newWalletPayee);
 
             return new TransferOutputDto(
                 payerWallet: $newWalletPayer,

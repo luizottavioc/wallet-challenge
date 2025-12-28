@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 use App\Application\Exception\GenericLoginException;
 use App\Application\Exception\UnauthorizedTransferException;
-use App\Domain\Exception\UserHasNoFundsToPerformTransferException;
-use App\Domain\Exception\UserTypeCannotPerformTransferException;
+use App\Domain\Exception\CannotPerformTransferByInsufficientFundsException;
+use App\Domain\Exception\CannotPerformTransferByUserTypeException;
 use App\Infrastructure\Enum\HttpCodesEnum;
 use App\Infrastructure\Exception\InvalidTokenException;
 
@@ -22,6 +22,6 @@ return [
     InvalidTokenException::class => HttpCodesEnum::UNAUTHORIZED,
     GenericLoginException::class => HttpCodesEnum::UNPROCESSABLE_ENTITY,
     UnauthorizedTransferException::class => HttpCodesEnum::FORBIDDEN,
-    UserTypeCannotPerformTransferException::class => HttpCodesEnum::FORBIDDEN,
-    UserHasNoFundsToPerformTransferException::class => HttpCodesEnum::UNPROCESSABLE_ENTITY,
+    CannotPerformTransferByUserTypeException::class => HttpCodesEnum::FORBIDDEN,
+    CannotPerformTransferByInsufficientFundsException::class => HttpCodesEnum::UNPROCESSABLE_ENTITY,
 ];
