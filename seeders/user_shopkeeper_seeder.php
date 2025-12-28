@@ -6,6 +6,7 @@ use App\Domain\Enum\UserTypeEnum;
 use App\Infrastructure\Eloquent\Model\User;
 use Faker\Factory;
 use Hyperf\Database\Seeders\Seeder;
+use Hyperf\Stringable\Str;
 
 class UserShopkeeperSeeder extends Seeder
 {
@@ -17,13 +18,13 @@ class UserShopkeeperSeeder extends Seeder
     public function run()
     {
         $faker = Factory::create('pt_BR');
-
         $email = $faker->email();
         $password = 'password';
 
         User::create([
+            'id' => Str::uuid(),
             'name' => $faker->name(),
-            'email' => $faker->email(),
+            'email' => $email,
             'password' => password_hash($password, PASSWORD_DEFAULT),
             'cpf' => null,
             'cnpj' => $faker->cnpj(false),

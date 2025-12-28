@@ -17,7 +17,8 @@ class AuthController extends AbstractController
         RequestInterface $request,
         ResponseInterface $response,
         protected LoginUseCase $loginUseCase
-    ) {
+    )
+    {
         parent::__construct($request, $response);
     }
 
@@ -34,6 +35,5 @@ class AuthController extends AbstractController
             'Logged successfully',
             $loginOutputDto->toArray()
         );
-
     }
 }

@@ -10,7 +10,7 @@ final readonly class AccessTokenDto
 {
     public function __construct(
         private string $token,
-        private string|int $userId,
+        private string $userId,
         private UserTypeEnum $userType,
         private int $createdAt,
         private int $expiresAt,
@@ -21,7 +21,7 @@ final readonly class AccessTokenDto
         return $this->token;
     }
 
-    public function getUserId(): int|string
+    public function getUserId(): string
     {
         return $this->userId;
     }

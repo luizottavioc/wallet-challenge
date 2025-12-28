@@ -4,45 +4,41 @@ declare(strict_types=1);
 
 namespace App\Domain\Entity;
 
-use App\Domain\Enum\TransactionStatusEnum;
+use App\Domain\ValueObject\Identifier;
+use App\Domain\ValueObject\Money;
+use App\Domain\ValueObject\PrecisionTimestamp;
 
 final readonly class TransactionEntity
 {
     public function __construct(
-        private string|int $id,
-        private string|int $payerId,
-        private string|int $payeeId,
-        private int $amount,
-        private TransactionStatusEnum $status,
-        private int $processedAt
+        private Identifier $id,
+        private UserEntity $payer,
+        private UserEntity $payee,
+        private Money $amount,
+        private PrecisionTimestamp $processedAt
     ) {}
 
-    public function getId(): int|string
+    public function getId(): Identifier
     {
         return $this->id;
     }
 
-    public function getPayerId(): int|string
+    public function getPayer(): UserEntity
     {
-        return $this->payerId;
+        return $this->payer;
     }
 
-    public function getPayeeId(): int|string
+    public function getPayee(): UserEntity
     {
-        return $this->payeeId;
+        return $this->payee;
     }
 
-    public function getAmount(): int
+    public function getAmount(): Money
     {
         return $this->amount;
     }
 
-    public function getStatus(): TransactionStatusEnum
-    {
-        return $this->status;
-    }
-
-    public function getProcessedAt(): int
+    public function getProcessedAt(): PrecisionTimestamp
     {
         return $this->processedAt;
     }

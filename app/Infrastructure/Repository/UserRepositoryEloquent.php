@@ -7,10 +7,15 @@ namespace App\Infrastructure\Repository;
 use App\Domain\Contract\Repository\UserRepositoryInterface;
 use App\Domain\Entity\UserEntity;
 use App\Domain\Enum\UserTypeEnum;
+use App\Domain\ValueObject\Identifier;
 use App\Infrastructure\Eloquent\Model\User;
+use Random\RandomException;
 
 final class UserRepositoryEloquent implements UserRepositoryInterface
 {
+    /**
+     * @throws RandomException
+     */
     public function findUserByEmail(string $email): ?UserEntity
     {
         $user = User::query()->where('email', $email)->first();
@@ -19,7 +24,7 @@ final class UserRepositoryEloquent implements UserRepositoryInterface
         }
 
         return new UserEntity(
-            id: $user->id,
+            id: new Identifier($user->id),
             name: $user->name,
             email: $user->email,
             cpf: $user->cpf,

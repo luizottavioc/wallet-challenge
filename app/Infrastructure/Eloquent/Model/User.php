@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Hyperf\DbConnection\Model\Model;
 
 /**
- * @property int $id
+ * @property string $id
  * @property string $name
  * @property string $email
  * @property string $cpf
@@ -17,10 +17,12 @@ use Hyperf\DbConnection\Model\Model;
  * @property string $type
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property string $deleted_at
+ * @property Carbon|null $deleted_at
  */
 class User extends Model
 {
+    public bool $incrementing = false;
+
     /**
      * The table associated with the model.
      */
@@ -35,8 +37,11 @@ class User extends Model
      * The attributes that should be cast to native types.
      */
     protected array $casts = [
-        'id' => 'integer',
+        'id' => 'string',
         'created_at' => 'datetime',
-        'updated_at' => 'datetime'
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime'
     ];
+
+    protected string $keyType = 'string';
 }

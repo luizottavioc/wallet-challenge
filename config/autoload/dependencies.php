@@ -12,14 +12,29 @@ declare(strict_types=1);
  */
 
 use App\Application\Contract\AuthenticatorInterface;
+use App\Application\Contract\EventDispatcherInterface;
+use App\Application\Contract\TransactionManagerInterface;
+use App\Application\Contract\TransferAuthorizerInterface;
+use App\Domain\Contract\Repository\TransactionRepositoryInterface;
 use App\Domain\Contract\Repository\UserRepositoryInterface;
+use App\Domain\Contract\Repository\WalletRepositoryInterface;
 use App\Domain\Contract\Service\PasswordHasherInterface;
 use App\Infrastructure\Adapter\AuthenticatorAdapterJWT;
+use App\Infrastructure\Adapter\EventDispatcherAdapterAmqp;
 use App\Infrastructure\Adapter\PasswordHasherAdapterBcrypt;
+use App\Infrastructure\Adapter\TransactionManagerAdapterHyperf;
+use App\Infrastructure\Adapter\TransferAuthorizerAdapterGuzzle;
+use App\Infrastructure\Repository\TransactionRepositoryEloquent;
 use App\Infrastructure\Repository\UserRepositoryEloquent;
+use App\Infrastructure\Repository\WalletRepositoryEloquent;
 
 return [
     UserRepositoryInterface::class => UserRepositoryEloquent::class,
     AuthenticatorInterface::class => AuthenticatorAdapterJWT::class,
     PasswordHasherInterface::class => PasswordHasherAdapterBcrypt::class,
+    TransactionManagerInterface::class => TransactionManagerAdapterHyperf::class,
+    TransferAuthorizerInterface::class => TransferAuthorizerAdapterGuzzle::class,
+    EventDispatcherInterface::class => EventDispatcherAdapterAmqp::class,
+    WalletRepositoryInterface::class => WalletRepositoryEloquent::class,
+    TransactionRepositoryInterface::class => TransactionRepositoryEloquent::class,
 ];

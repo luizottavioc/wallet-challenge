@@ -7,11 +7,12 @@ namespace App\Domain\Entity;
 use App\Domain\Contract\Service\PasswordHasherInterface;
 use App\Domain\Enum\UserTypeEnum;
 use App\Domain\Exception\InvalidPasswordException;
+use App\Domain\ValueObject\Identifier;
 
 final readonly class UserEntity
 {
     public function __construct(
-        private string|int $id,
+        private Identifier $id,
         private string $name,
         private string $email,
         private string|null $cpf,
@@ -20,7 +21,7 @@ final readonly class UserEntity
         private UserTypeEnum $type
     ) {}
 
-    public function getId(): int|string
+    public function getId(): Identifier
     {
         return $this->id;
     }
@@ -43,5 +44,15 @@ final readonly class UserEntity
         if (!$hasher->check($plainPassword, $this->password)) {
             throw new InvalidPasswordException();
         }
+    }
+
+    public function canPerformTransfer(): bool
+    {
+        return $this->type == UserTypeEnum::DEFAULT;
+    }
+
+    public function isEqualTo(UserEntity $user): bool
+    {
+        return $this->id->getValue() === $user->getId()->getValue();
     }
 }

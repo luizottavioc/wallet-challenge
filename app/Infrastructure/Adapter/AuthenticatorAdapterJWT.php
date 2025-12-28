@@ -29,7 +29,7 @@ final class AuthenticatorAdapterJWT implements AuthenticatorInterface
         $expirationTime = $now + self::TOKEN_EXPIRATION_IN_SECONDS;
 
         $tokenPayload = [
-            'sub' => $user->getId(),
+            'sub' => $user->getId()->getValue(),
             'email' => $user->getEmail(),
             'type' => $user->getType()->value,
             'iat' => $now,
@@ -44,7 +44,7 @@ final class AuthenticatorAdapterJWT implements AuthenticatorInterface
 
         return new AccessTokenDto(
             token: $token,
-            userId: $user->getId(),
+            userId: $user->getId()->getValue(),
             userType: $user->getType(),
             createdAt: $now,
             expiresAt: $expirationTime,
