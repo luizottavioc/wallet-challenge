@@ -14,6 +14,8 @@ declare(strict_types=1);
 use function Hyperf\Support\env;
 
 return [
-    'transfer_authorizer_endpoint' => env('TRANSFER_AUTHORIZER_ENDPOINT', 'https://util.devi.tools/api/v2/authorize'),
-    'notify_endpoint' => env('NOTIFY_ENDPOINT', 'https://util.devi.tools/api/v1/notify'),
+    'authorizer_service_url' => env('AUTHORIZER_SERVICE_URL', 'https://util.devi.tools'),
+    'authorizer_transfer_endpoint' => env('AUTHORIZER_TRANSFER_ENDPOINT', '/api/v2/authorize'),
+    'notifier_service_url' => env('NOTIFIER_SERVICE_URL', 'https://util.devi.tools'),
+    'notifier_notify_endpoint' => env('NOTIFIER_NOTIFY_ENDPOINT', '/api/v1/notify'),
 ];
