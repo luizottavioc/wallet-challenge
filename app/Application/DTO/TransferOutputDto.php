@@ -18,17 +18,17 @@ final readonly class TransferOutputDto
     {
         return [
             'wallet' => [
-                'id' => $this->payerWallet->getId(),
-                'userId' => $this->payerWallet->getUser()->getId(),
-                'amount' => $this->payerWallet->getAmount(),
-                'processedAt' => $this->payerWallet->getProcessedAt(),
+                'id' => $this->payerWallet->getId()->getValue(),
+                'userId' => $this->payerWallet->getUser()->getId()->getValue(),
+                'amount' => $this->payerWallet->getAmount()->getValue(),
+                'processedAt' => $this->payerWallet->getProcessedAt()->format(),
             ],
             'transaction' => [
-                'id' => $this->transaction->getId(),
-                'payerId' => $this->transaction->getPayer(),
-                'payeeId' => $this->transaction->getPayee(),
-                'amount' => $this->transaction->getAmount(),
-                'processedAt' => $this->transaction->getProcessedAt(),
+                'id' => $this->transaction->getId()->getValue(),
+                'payerId' => $this->transaction->getPayer()->getId()->getValue(),
+                'payeeId' => $this->transaction->getPayee()->getId()->getValue(),
+                'amount' => $this->transaction->getAmount()->getValue(),
+                'processedAt' => $this->transaction->getProcessedAt()->format(),
             ],
         ];
     }
