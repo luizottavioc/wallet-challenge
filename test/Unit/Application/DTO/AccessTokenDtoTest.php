@@ -6,7 +6,6 @@ namespace HyperfTest\Unit\Application\DTO;
 
 use App\Application\DTO\AccessTokenDto;
 use App\Domain\Enum\UserTypeEnum;
-use Hyperf\Stringable\Str;
 use PHPUnit\Framework\TestCase;
 
 final class AccessTokenDtoTest extends TestCase
@@ -14,7 +13,7 @@ final class AccessTokenDtoTest extends TestCase
     public function testAccessTokenDtoCreation(): void
     {
         $token = 'jwt.token.string';
-        $userId = Str::uuid()->toString();
+        $userId = 'user-uuid';
         $userType = UserTypeEnum::DEFAULT;
         $createdAt = time();
         $expiresAt = $createdAt + 3600;
@@ -37,7 +36,7 @@ final class AccessTokenDtoTest extends TestCase
     public function testGetRemainingTimeWithValidToken(): void
     {
         $token = 'jwt.token.string';
-        $userId = Str::uuid()->toString();
+        $userId = 'user-uuid';
         $userType = UserTypeEnum::DEFAULT;
         $createdAt = time();
         $expiresAt = $createdAt + 3600;
@@ -60,7 +59,7 @@ final class AccessTokenDtoTest extends TestCase
     public function testGetRemainingTimeWithExpiredToken(): void
     {
         $token = 'jwt.token.string';
-        $userId = Str::uuid()->toString();
+        $userId = 'user-uuid';
         $userType = UserTypeEnum::DEFAULT;
         $createdAt = time() - 7200;
         $expiresAt = $createdAt + 3600;
@@ -82,7 +81,7 @@ final class AccessTokenDtoTest extends TestCase
     public function testGetRemainingTimeWithTokenAboutToExpire(): void
     {
         $token = 'jwt.token.string';
-        $userId = Str::uuid()->toString();
+        $userId = 'user-uuid';
         $userType = UserTypeEnum::DEFAULT;
         $createdAt = time() - 3595;
         $expiresAt = $createdAt + 3600;
@@ -105,7 +104,7 @@ final class AccessTokenDtoTest extends TestCase
     public function testAccessTokenDtoWithShopkeeperUser(): void
     {
         $token = 'jwt.token.string';
-        $userId = Str::uuid()->toString();
+        $userId = 'user-uuid';
         $userType = UserTypeEnum::SHOPKEEPER;
         $createdAt = time();
         $expiresAt = $createdAt + 3600;

@@ -56,6 +56,6 @@ readonly class Money
 
     public function format(): string
     {
-        return '$ ' . number_format($this->value / 100, 2, ',', '.');
+        return '$ ' . number_format($this->value / 100, 2);
     }
 }

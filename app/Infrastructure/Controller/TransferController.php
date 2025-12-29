@@ -6,6 +6,7 @@ namespace App\Infrastructure\Controller;
 
 use App\Application\Exception\UnauthorizedTransferException;
 use App\Application\UseCase\TransferUseCase;
+use App\Domain\Exception\CannotPerformTransferForItselfException;
 use App\Domain\Exception\CannotSubtractAmountException;
 use App\Domain\Exception\InvalidValueObjectArgumentException;
 use App\Domain\Exception\CannotPerformTransferByInsufficientFundsException;
@@ -32,6 +33,7 @@ class TransferController extends AbstractController
      * @throws InvalidValueObjectArgumentException
      * @throws CannotPerformTransferByInsufficientFundsException
      * @throws CannotPerformTransferByUserTypeException
+     * @throws CannotPerformTransferForItselfException
      */
     public function transfer(TransferRequest $transferRequest): ResponseInterface
     {

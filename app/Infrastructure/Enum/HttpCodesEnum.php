@@ -6,6 +6,7 @@ enum HttpCodesEnum: int
 {
     case OK = 200;
     case CREATED = 201;
+    case ACCEPTED = 202;
     case NO_CONTENT = 204;
 
     case MOVED_PERMANENTLY = 301;

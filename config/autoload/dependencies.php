@@ -29,13 +29,27 @@ use App\Infrastructure\Adapter\TransferAuthorizerAdapterGuzzle;
 use App\Infrastructure\Repository\TransactionRepositoryEloquent;
 use App\Infrastructure\Repository\UserRepositoryEloquent;
 use App\Infrastructure\Repository\WalletRepositoryEloquent;
+use Hyperf\Contract\ConfigInterface;
+use Hyperf\Guzzle\ClientFactory;
 
 return [
     UserRepositoryInterface::class => UserRepositoryEloquent::class,
     AuthenticatorInterface::class => AuthenticatorAdapterJWT::class,
     PasswordHasherInterface::class => PasswordHasherAdapterBcrypt::class,
     TransactionManagerInterface::class => TransactionManagerAdapterHyperf::class,
-    TransferAuthorizerInterface::class => TransferAuthorizerAdapterGuzzle::class,
+    TransferAuthorizerInterface::class => function ($container) {
+        $factory = $container->get(ClientFactory::class);
+        $config = $container->get(ConfigInterface::class);
+
+        $client = $factory->create([
+            'base_uri' => $config->get('consolidators.authorizer_service_url')
+        ]);
+
+        return new TransferAuthorizerAdapterGuzzle(
+            $client,
+            $config->get('consolidators.authorizer_transfer_endpoint')
+        );
+    },
     EventDispatcherInterface::class => EventDispatcherAdapterAmqp::class,
     WalletRepositoryInterface::class => WalletRepositoryEloquent::class,
     TransactionRepositoryInterface::class => TransactionRepositoryEloquent::class,
