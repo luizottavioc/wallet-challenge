@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 use App\Domain\Enum\UserTypeEnum;
 use App\Infrastructure\Eloquent\Model\User;
+use App\Infrastructure\Eloquent\Model\Wallet;
 use Faker\Factory;
 use Hyperf\Database\Seeders\Seeder;
 use Hyperf\Stringable\Str;
+use function Hyperf\Support\now;
 
 class UserShopkeeperSeeder extends Seeder
 {
@@ -21,7 +23,7 @@ class UserShopkeeperSeeder extends Seeder
         $email = $faker->email();
         $password = 'password';
 
-        User::create([
+        $user = User::create([
             'id' => Str::uuid(),
             'name' => $faker->name(),
             'email' => $email,
@@ -31,8 +33,16 @@ class UserShopkeeperSeeder extends Seeder
             'type' => UserTypeEnum::SHOPKEEPER->value,
         ]);
 
+        Wallet::create([
+            'id' => Str::uuid(),
+            'user_id' => $user->id,
+            'amount' => 5000,
+            'processed_at' => now('UTC')->format('Y-m-d H:i:s.u'),
+        ]);
+
         echo "Shopkeeper user created:\n";
         echo "- Email: $email\n";
         echo "- Password: $password\n";
+        echo "- Initial wallet amount: $ " . 5000 / 100 . "\n";
     }
 }

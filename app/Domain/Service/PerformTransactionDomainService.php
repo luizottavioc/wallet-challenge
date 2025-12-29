@@ -8,6 +8,7 @@ use App\Domain\Entity\TransactionEntity;
 use App\Domain\Entity\WalletEntity;
 use App\Domain\Exception\CannotPerformTransferByInsufficientFundsException;
 use App\Domain\Exception\CannotPerformTransferByUserTypeException;
+use App\Domain\Exception\CannotPerformTransferForItselfException;
 use App\Domain\ValueObject\Identifier;
 use App\Domain\ValueObject\Money;
 use App\Domain\ValueObject\PrecisionTimestamp;
@@ -17,6 +18,7 @@ class PerformTransactionDomainService
     /**
      * @throws CannotPerformTransferByInsufficientFundsException
      * @throws CannotPerformTransferByUserTypeException
+     * @throws CannotPerformTransferForItselfException
      */
     public function execute(WalletEntity $walletPayer, WalletEntity $walletPayee, Money $amount): TransactionEntity
     {
@@ -25,7 +27,7 @@ class PerformTransactionDomainService
         }
 
         if ($walletPayer->getUser()->isEqualTo($walletPayee->getUser())) {
-            throw new CannotPerformTransferByUserTypeException();
+            throw new CannotPerformTransferForItselfException();
         }
 
         if (!$walletPayer->hasFunds($amount)) {
