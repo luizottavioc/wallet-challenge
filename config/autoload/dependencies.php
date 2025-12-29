@@ -37,21 +37,25 @@ return [
     AuthenticatorInterface::class => AuthenticatorAdapterJWT::class,
     PasswordHasherInterface::class => PasswordHasherAdapterBcrypt::class,
     TransactionManagerInterface::class => TransactionManagerAdapterHyperf::class,
+    EventDispatcherInterface::class => EventDispatcherAdapterAmqp::class,
+    WalletRepositoryInterface::class => WalletRepositoryEloquent::class,
+    TransactionRepositoryInterface::class => TransactionRepositoryEloquent::class,
     TransferAuthorizerInterface::class => function ($container) {
         $factory = $container->get(ClientFactory::class);
         $config = $container->get(ConfigInterface::class);
-
         $client = $factory->create([
             'base_uri' => $config->get('consolidators.authorizer_service_url')
         ]);
 
-        return new TransferAuthorizerAdapterGuzzle(
-            $client,
-            $config->get('consolidators.authorizer_transfer_endpoint')
-        );
+        return new TransferAuthorizerAdapterGuzzle($client, $config->get('consolidators.authorizer_transfer_endpoint'));
     },
-    EventDispatcherInterface::class => EventDispatcherAdapterAmqp::class,
-    WalletRepositoryInterface::class => WalletRepositoryEloquent::class,
-    TransactionRepositoryInterface::class => TransactionRepositoryEloquent::class,
-    NotifierInterface::class => NotifierAdapterGuzzle::class
+    NotifierInterface::class => function ($container) {
+        $factory = $container->get(ClientFactory::class);
+        $config = $container->get(ConfigInterface::class);
+        $client = $factory->create([
+            'base_uri' => $config->get('consolidators.notifier_notify_endpoint')
+        ]);
+
+        return new NotifierAdapterGuzzle($client, $config->get('consolidators.notifier_service_url'));
+    }
 ];

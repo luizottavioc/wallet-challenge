@@ -6,29 +6,22 @@ namespace App\Infrastructure\Adapter;
 
 use App\Application\Contract\NotifierInterface;
 use App\Application\DTO\NotificationDto;
-use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
-use function Hyperf\Config\config;
 
-final class NotifierAdapterGuzzle implements NotifierInterface
+final readonly class NotifierAdapterGuzzle implements NotifierInterface
 {
-    private Client $client;
-    private string $authorizerTransferEndpoint;
-
-    public function __construct()
-    {
-        $this->authorizerTransferEndpoint = config('consolidators.notifier_notify_endpoint');
-        $this->client = new Client([
-            'base_uri' => config('consolidators.notifier_service_url')
-        ]);
-    }
+    public function __construct(
+        private ClientInterface $client,
+        private string $endpoint
+    ) {}
 
     /**
      * @throws GuzzleException
      */
     public function notify(NotificationDto $notifyDto): void
     {
-        $this->client->post($this->authorizerTransferEndpoint, [
+        $this->client->post($this->endpoint, [
             'json' => $notifyDto->toArray()
         ]);
     }
