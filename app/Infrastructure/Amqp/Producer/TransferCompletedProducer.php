@@ -15,4 +15,9 @@ class TransferCompletedProducer extends ProducerMessage
     {
         $this->payload = $transferCompletedEvent->transactionId;
     }
+
+    public function getPayload(): string
+    {
+        return $this->payload;
+    }
 }

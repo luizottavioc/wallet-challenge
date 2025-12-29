@@ -31,6 +31,7 @@ use App\Domain\Enum\UserTypeEnum;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Random\RandomException;
 
 final class TransferUseCaseTest extends TestCase
 {
@@ -74,6 +75,7 @@ final class TransferUseCaseTest extends TestCase
      * @throws CannotPerformTransferByInsufficientFundsException
      * @throws CannotPerformTransferByUserTypeException
      * @throws CannotPerformTransferForItselfException
+     * @throws RandomException
      */
     public function testTransferSuccessfully(): void
     {
@@ -398,6 +400,124 @@ final class TransferUseCaseTest extends TestCase
         $result = $this->transferUseCase->transfer($transferInputDto);
 
         $this->assertSame($walletPayer, $result->payerWallet);
+        $this->assertSame($transaction, $result->transaction);
+    }
+
+    /**
+     * @throws CannotPerformTransferByInsufficientFundsException
+     * @throws CannotPerformTransferByUserTypeException
+     * @throws CannotPerformTransferForItselfException
+     * @throws CannotSubtractAmountException
+     * @throws InvalidValueObjectArgumentException
+     * @throws UnauthorizedTransferException
+     * @throws RandomException
+     */
+    public function testPerformTransferMethod(): void
+    {
+        $payerId = 'payer-uuid';
+        $payeeId = 'payee-uuid';
+        $amount = 10000;
+        $transactionId = 'transaction-uuid';
+
+        $transferInputDto = new TransferInputDto($payerId, $payeeId, $amount);
+
+        $payerUser = new UserEntity(
+            id: new Identifier($payerId),
+            name: 'Payer User',
+            email: 'payer@example.com',
+            cpf: '12345678901',
+            cnpj: null,
+            password: 'hashed_password',
+            type: UserTypeEnum::DEFAULT
+        );
+
+        $payeeUser = new UserEntity(
+            id: new Identifier($payeeId),
+            name: 'Payee User',
+            email: 'payee@example.com',
+            cpf: '98765432109',
+            cnpj: null,
+            password: 'hashed_password',
+            type: UserTypeEnum::DEFAULT
+        );
+
+        $walletPayer = new WalletEntity(
+            id: new Identifier(),
+            user: $payerUser,
+            amount: new Money(20000),
+            processedAt: new PrecisionTimestamp()
+        );
+
+        $walletPayee = new WalletEntity(
+            id: new Identifier(),
+            user: $payeeUser,
+            amount: new Money(5000),
+            processedAt: new PrecisionTimestamp()
+        );
+
+        $transaction = new TransactionEntity(
+            id: new Identifier($transactionId),
+            payer: $payerUser,
+            payee: $payeeUser,
+            amount: new Money($amount),
+            processedAt: new PrecisionTimestamp()
+        );
+
+        $updatedWalletPayer = new WalletEntity(
+            id: $walletPayer->getId(),
+            user: $walletPayer->getUser(),
+            amount: new Money(10000),
+            processedAt: new PrecisionTimestamp()
+        );
+
+        $this->walletRepository
+            ->expects($this->exactly(2))
+            ->method('findByUserIdLocking')
+            ->willReturnOnConsecutiveCalls($walletPayer, $walletPayee);
+
+        $this->performTransactionDomainService
+            ->expects($this->once())
+            ->method('execute')
+            ->with($walletPayer, $walletPayee, new Money($amount))
+            ->willReturn($transaction);
+
+        $this->transactionRepository
+            ->expects($this->once())
+            ->method('save')
+            ->with($transaction);
+
+        $this->updateWalletByTransactionDomainService
+            ->expects($this->exactly(2))
+            ->method('execute')
+            ->willReturnOnConsecutiveCalls($updatedWalletPayer, $walletPayee);
+
+        $this->walletRepository
+            ->expects($this->exactly(2))
+            ->method('save')
+            ->willReturnOnConsecutiveCalls($updatedWalletPayer, [$walletPayee]);
+
+        $this->transferAuthorizer
+            ->expects($this->once())
+            ->method('authorize')
+            ->willReturn(true);
+
+        $this->transactionManager
+            ->expects($this->once())
+            ->method('run')
+            ->willReturnCallback(function ($callback) use ($transferInputDto) {
+                return $callback();
+            });
+
+        $this->eventDispatcher
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with($this->callback(function ($event) use ($transactionId) {
+                return $event instanceof TransferCompletedEvent && $event->transactionId === $transactionId;
+            }));
+
+        $result = $this->transferUseCase->transfer($transferInputDto);
+
+        $this->assertSame($updatedWalletPayer, $result->payerWallet);
         $this->assertSame($transaction, $result->transaction);
     }
 }

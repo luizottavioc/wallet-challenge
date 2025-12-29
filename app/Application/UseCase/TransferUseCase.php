@@ -49,7 +49,6 @@ final readonly class TransferUseCase
             throw new UnauthorizedTransferException();
         }
 
-        /* @var TransferOutputDto $transferOutputDto */
         $transferOutputDto = $this->transactionManager->run(fn() => $this->performTransfer($transferInputDto));
         $this->dispatchTransferCompletedEvent($transferOutputDto->transaction->getId()->getValue());
 
@@ -63,7 +62,7 @@ final readonly class TransferUseCase
      * @throws InvalidValueObjectArgumentException
      * @throws CannotPerformTransferForItselfException
      */
-    private function performTransfer($transferInputDto): TransferOutputDto
+    public function performTransfer($transferInputDto): TransferOutputDto
     {
         $walletPayer = $this->walletRepository->findByUserIdLocking($transferInputDto->payerId);
         $walletPayee = $this->walletRepository->findByUserIdLocking($transferInputDto->payeeId);

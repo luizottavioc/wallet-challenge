@@ -10,6 +10,11 @@ use Hyperf\DbConnection\Db;
 
 final class TransactionManagerAdapterHyperf implements TransactionManagerInterface
 {
+    /**
+     * @template T
+     * @param Closure(): T $callback
+     * @return T
+     */
     public function run(Closure $callback): mixed
     {
         return Db::transaction($callback);

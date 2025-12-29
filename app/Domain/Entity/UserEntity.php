@@ -26,9 +26,24 @@ final readonly class UserEntity
         return $this->id;
     }
 
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
     public function getEmail(): string
     {
         return $this->email;
+    }
+
+    public function getCpf(): ?string
+    {
+        return $this->cpf;
+    }
+
+    public function getCnpj(): ?string
+    {
+        return $this->cnpj;
     }
 
     public function getType(): UserTypeEnum
