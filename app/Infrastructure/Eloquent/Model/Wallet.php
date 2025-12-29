@@ -6,7 +6,6 @@ namespace App\Infrastructure\Eloquent\Model;
 
 use Carbon\Carbon;
 use Hyperf\Database\Model\Relations\BelongsTo;
-use Hyperf\Database\Model\SoftDeletes;
 use Hyperf\DbConnection\Model\Model;
 
 /**
@@ -14,15 +13,10 @@ use Hyperf\DbConnection\Model\Model;
  * @property string $user_id
  * @property int $amount
  * @property Carbon $processed_at
- * @property Carbon $created_at
- * @property Carbon $updated_at
- * @property Carbon|null $deleted_at
  * @property User $user
  */
 class Wallet extends Model
 {
-    use SoftDeletes;
-
     public bool $incrementing = false;
 
     /**
@@ -53,6 +47,8 @@ class Wallet extends Model
     protected string $keyType = 'string';
 
     protected ?string $dateFormat = 'Y-m-d H:i:s.u';
+
+    public bool $timestamps = false;
 
     public function user(): BelongsTo
     {

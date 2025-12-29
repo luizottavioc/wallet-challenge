@@ -17,10 +17,8 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->integer('amount');
             $table->timestamp('processed_at', 6);
-            $table->timestamps(6);
-            $table->softDeletes('deleted_at', 6);
 
-            $table->index(['user_id', 'processed_at', 'deleted_at']);
+            $table->index(['user_id', 'processed_at']);
         });
     }
 
