@@ -96,7 +96,7 @@ php bin/hyperf.php db:seed --path=seeders/user_shopkeeper_seeder.php
 ```sh
 composer test
 ```
-8. Testes com coverage:  
+8. Testes com coverage (coverage disponível em /test/coverage):  
 ```sh
 composer test-coverage
 ```
@@ -133,7 +133,7 @@ curl --location 'localhost:9501/transfer' \
 - Execução transacional
 
 ### Postman
-Caso se sinta mais confortável, acesse a collection que está configurada com os endpoints da aplicação via Postman no seguinte link: [Wallet Challenge Postman Collection](https://www.postman.com/luizottavioc-workspace/workspace/public-workspace/collection/39605447-91b8de82-e43b-4810-934e-67d66c257088?action=share&source=copy-link&creator=39605447)
+Caso se sinta mais confortável, acesse a collection que está configurada com os endpoints da aplicação via Postman no seguinte link: [Wallet Challenge Postman Collection](https://www.postman.com/luizottavioc-workspace/workspace/public-workspace/collection/39605447-91b8de82-e43b-4810-934e-67d66c257088?action=share&source=copy-link&creator=39605447) (Você pode acessar as variáveis da collection e alterá-las de acordo com seu ambiente)
 
 ## Limitações e Melhorias
 
