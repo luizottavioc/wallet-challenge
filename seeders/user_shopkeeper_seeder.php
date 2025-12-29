@@ -24,7 +24,7 @@ class UserShopkeeperSeeder extends Seeder
         $password = 'password';
 
         $user = User::create([
-            'id' => Str::uuid(),
+            'id' => $faker->uuid(),
             'name' => $faker->name(),
             'email' => $email,
             'password' => password_hash($password, PASSWORD_DEFAULT),
@@ -34,7 +34,7 @@ class UserShopkeeperSeeder extends Seeder
         ]);
 
         Wallet::create([
-            'id' => Str::uuid(),
+            'id' => $faker->uuid(),
             'user_id' => $user->id,
             'amount' => 5000,
             'processed_at' => now('UTC')->format('Y-m-d H:i:s.u'),

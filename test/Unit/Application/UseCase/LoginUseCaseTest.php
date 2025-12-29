@@ -51,7 +51,7 @@ final class LoginUseCaseTest extends TestCase
     {
         $email = 'test@example.com';
         $password = 'password123';
-        $userId = Str::uuid()->toString();
+        $userId = 'user-uuid';
         $userType = UserTypeEnum::DEFAULT;
         $token = 'generated.jwt.token';
         $expiresAt = time() + 3600;
@@ -130,7 +130,7 @@ final class LoginUseCaseTest extends TestCase
     {
         $email = 'test@example.com';
         $password = 'wrong_password';
-        $userId = Str::uuid()->toString();
+        $userId = 'user-uuid';
         $userType = UserTypeEnum::DEFAULT;
 
         $loginInputDto = new LoginInputDto($email, $password);
@@ -170,7 +170,7 @@ final class LoginUseCaseTest extends TestCase
     {
         $email = 'test@example.com';
         $password = 'password123';
-        $userId = Str::uuid()->toString();
+        $userId = 'user-uuid';
         $userType = UserTypeEnum::DEFAULT;
 
         $loginInputDto = new LoginInputDto($email, $password);
@@ -213,7 +213,7 @@ final class LoginUseCaseTest extends TestCase
     {
         $email = 'shopkeeper@example.com';
         $password = 'password123';
-        $userId = Str::uuid()->toString();
+        $userId = 'user-uuid';
         $userType = UserTypeEnum::SHOPKEEPER;
         $token = 'generated.jwt.token';
         $expiresAt = time() + 3600;
@@ -269,7 +269,7 @@ final class LoginUseCaseTest extends TestCase
     {
         $email = 'user@example.com';
         $password = 'password123';
-        $userId = Str::uuid()->toString();
+        $userId = 'user-uuid';
         $userType = UserTypeEnum::DEFAULT;
         $token = 'generated.jwt.token';
         $expiresAt = time() + 3600;
