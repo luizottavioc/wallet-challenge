@@ -6,6 +6,7 @@ namespace HyperfTest\Unit\Application\DTO;
 
 use App\Application\DTO\AccessTokenDto;
 use App\Domain\Enum\UserTypeEnum;
+use Hyperf\Stringable\Str;
 use PHPUnit\Framework\TestCase;
 
 final class AccessTokenDtoTest extends TestCase
@@ -13,31 +14,8 @@ final class AccessTokenDtoTest extends TestCase
     public function testAccessTokenDtoCreation(): void
     {
         $token = 'jwt.token.string';
-        $userId = 1;
+        $userId = Str::uuid()->toString();
         $userType = UserTypeEnum::DEFAULT;
-        $createdAt = time();
-        $expiresAt = $createdAt + 3600;
-
-        $accessTokenDto = new AccessTokenDto(
-            token: $token,
-            userId: $userId,
-            userType: $userType,
-            createdAt: $createdAt,
-            expiresAt: $expiresAt
-        );
-
-        $this->assertEquals($token, $accessTokenDto->getToken());
-        $this->assertEquals($userId, $accessTokenDto->getUserId());
-        $this->assertEquals($userType, $accessTokenDto->getUserType());
-        $this->assertEquals($createdAt, $accessTokenDto->getCreatedAt());
-        $this->assertEquals($expiresAt, $accessTokenDto->getExpiresAt());
-    }
-
-    public function testAccessTokenDtoWithStringUserId(): void
-    {
-        $token = 'jwt.token.string';
-        $userId = 'user-uuid-string';
-        $userType = UserTypeEnum::SHOPKEEPER;
         $createdAt = time();
         $expiresAt = $createdAt + 3600;
 
@@ -59,7 +37,7 @@ final class AccessTokenDtoTest extends TestCase
     public function testGetRemainingTimeWithValidToken(): void
     {
         $token = 'jwt.token.string';
-        $userId = 1;
+        $userId = Str::uuid()->toString();
         $userType = UserTypeEnum::DEFAULT;
         $createdAt = time();
         $expiresAt = $createdAt + 3600;
@@ -82,7 +60,7 @@ final class AccessTokenDtoTest extends TestCase
     public function testGetRemainingTimeWithExpiredToken(): void
     {
         $token = 'jwt.token.string';
-        $userId = 1;
+        $userId = Str::uuid()->toString();
         $userType = UserTypeEnum::DEFAULT;
         $createdAt = time() - 7200;
         $expiresAt = $createdAt + 3600;
@@ -104,7 +82,7 @@ final class AccessTokenDtoTest extends TestCase
     public function testGetRemainingTimeWithTokenAboutToExpire(): void
     {
         $token = 'jwt.token.string';
-        $userId = 1;
+        $userId = Str::uuid()->toString();
         $userType = UserTypeEnum::DEFAULT;
         $createdAt = time() - 3595;
         $expiresAt = $createdAt + 3600;
@@ -127,7 +105,7 @@ final class AccessTokenDtoTest extends TestCase
     public function testAccessTokenDtoWithShopkeeperUser(): void
     {
         $token = 'jwt.token.string';
-        $userId = 2;
+        $userId = Str::uuid()->toString();
         $userType = UserTypeEnum::SHOPKEEPER;
         $createdAt = time();
         $expiresAt = $createdAt + 3600;

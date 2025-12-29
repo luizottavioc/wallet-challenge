@@ -14,9 +14,12 @@ use App\Domain\Contract\Service\PasswordHasherInterface;
 use App\Domain\Entity\UserEntity;
 use App\Domain\Enum\UserTypeEnum;
 use App\Domain\Exception\InvalidPasswordException;
+use App\Domain\ValueObject\Identifier;
+use Hyperf\Stringable\Str;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Random\RandomException;
 
 final class LoginUseCaseTest extends TestCase
 {
@@ -48,14 +51,14 @@ final class LoginUseCaseTest extends TestCase
     {
         $email = 'test@example.com';
         $password = 'password123';
-        $userId = 1;
+        $userId = Str::uuid()->toString();
         $userType = UserTypeEnum::DEFAULT;
         $token = 'generated.jwt.token';
         $expiresAt = time() + 3600;
 
         $loginInputDto = new LoginInputDto($email, $password);
         $user = new UserEntity(
-            id: $userId,
+            id: new Identifier($userId),
             name: 'Test User',
             email: $email,
             cpf: null,
@@ -127,12 +130,12 @@ final class LoginUseCaseTest extends TestCase
     {
         $email = 'test@example.com';
         $password = 'wrong_password';
-        $userId = 1;
+        $userId = Str::uuid()->toString();
         $userType = UserTypeEnum::DEFAULT;
 
         $loginInputDto = new LoginInputDto($email, $password);
         $user = new UserEntity(
-            id: $userId,
+            id: new Identifier($userId),
             name: 'Test User',
             email: $email,
             cpf: null,
@@ -167,12 +170,12 @@ final class LoginUseCaseTest extends TestCase
     {
         $email = 'test@example.com';
         $password = 'password123';
-        $userId = 1;
+        $userId = Str::uuid()->toString();
         $userType = UserTypeEnum::DEFAULT;
 
         $loginInputDto = new LoginInputDto($email, $password);
         $user = new UserEntity(
-            id: $userId,
+            id: new Identifier($userId),
             name: 'Test User',
             email: $email,
             cpf: null,
@@ -210,14 +213,14 @@ final class LoginUseCaseTest extends TestCase
     {
         $email = 'shopkeeper@example.com';
         $password = 'password123';
-        $userId = 2;
+        $userId = Str::uuid()->toString();
         $userType = UserTypeEnum::SHOPKEEPER;
         $token = 'generated.jwt.token';
         $expiresAt = time() + 3600;
 
         $loginInputDto = new LoginInputDto($email, $password);
         $user = new UserEntity(
-            id: $userId,
+            id: new Identifier($userId),
             name: 'Shopkeeper User',
             email: $email,
             cpf: null,
@@ -260,19 +263,20 @@ final class LoginUseCaseTest extends TestCase
 
     /**
      * @throws GenericLoginException
+     * @throws RandomException
      */
     public function testLoginWithUserHavingCpfSuccessfully(): void
     {
         $email = 'user@example.com';
         $password = 'password123';
-        $userId = 3;
+        $userId = Str::uuid()->toString();
         $userType = UserTypeEnum::DEFAULT;
         $token = 'generated.jwt.token';
         $expiresAt = time() + 3600;
 
         $loginInputDto = new LoginInputDto($email, $password);
         $user = new UserEntity(
-            id: $userId,
+            id: new Identifier($userId),
             name: 'User with CPF',
             email: $email,
             cpf: '12345678901',

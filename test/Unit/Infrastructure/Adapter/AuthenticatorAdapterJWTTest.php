@@ -6,8 +6,10 @@ namespace HyperfTest\Unit\Infrastructure\Adapter;
 
 use App\Domain\Entity\UserEntity;
 use App\Domain\Enum\UserTypeEnum;
+use App\Domain\ValueObject\Identifier;
 use App\Infrastructure\Adapter\AuthenticatorAdapterJWT;
 use Firebase\JWT\JWT;
+use Hyperf\Stringable\Str;
 use PHPUnit\Framework\TestCase;
 use function Hyperf\Config\config;
 
@@ -22,13 +24,13 @@ final class AuthenticatorAdapterJWTTest extends TestCase
 
     public function testGenerateTokenSuccessfully(): void
     {
-        $userId = 1;
+        $userId = Str::uuid()->toString();
         $email = 'test@example.com';
         $userType = UserTypeEnum::DEFAULT;
         $now = time();
 
         $user = new UserEntity(
-            id: $userId,
+            id: new Identifier($userId),
             name: 'Test User',
             email: $email,
             cpf: null,
@@ -49,13 +51,13 @@ final class AuthenticatorAdapterJWTTest extends TestCase
 
     public function testGenerateTokenWithShopkeeperUser(): void
     {
-        $userId = 2;
+        $userId = Str::uuid()->toString();
         $email = 'shopkeeper@example.com';
         $userType = UserTypeEnum::SHOPKEEPER;
         $now = time();
 
         $user = new UserEntity(
-            id: $userId,
+            id: new Identifier($userId),
             name: 'Shopkeeper User',
             email: $email,
             cpf: null,
@@ -76,12 +78,12 @@ final class AuthenticatorAdapterJWTTest extends TestCase
 
     public function testTokenIsValidWithValidToken(): void
     {
-        $userId = 1;
+        $userId = Str::uuid()->toString();
         $email = 'test@example.com';
         $userType = UserTypeEnum::DEFAULT;
 
         $user = new UserEntity(
-            id: $userId,
+            id: new Identifier($userId),
             name: 'Test User',
             email: $email,
             cpf: null,
@@ -99,7 +101,7 @@ final class AuthenticatorAdapterJWTTest extends TestCase
 
     public function testTokenIsInvalidWithExpiredToken(): void
     {
-        $userId = 1;
+        $userId = Str::uuid()->toString();
         $email = 'test@example.com';
         $userType = UserTypeEnum::DEFAULT;
         $pastTime = time() - 7200;
@@ -126,7 +128,7 @@ final class AuthenticatorAdapterJWTTest extends TestCase
 
     public function testTokenIsInvalidWithAnotherSecretKey(): void
     {
-        $userId = 1;
+        $userId = Str::uuid()->toString();
         $email = 'test@example.com';
         $userType = UserTypeEnum::DEFAULT;
         $pastTime = time() - 7200;
@@ -153,13 +155,13 @@ final class AuthenticatorAdapterJWTTest extends TestCase
 
     public function testDecodeTokenSuccessfully(): void
     {
-        $userId = 1;
+        $userId = Str::uuid()->toString();
         $email = 'test@example.com';
         $userType = UserTypeEnum::DEFAULT;
         $now = time();
 
         $user = new UserEntity(
-            id: $userId,
+            id: new Identifier($userId),
             name: 'Test User',
             email: $email,
             cpf: null,
@@ -181,13 +183,13 @@ final class AuthenticatorAdapterJWTTest extends TestCase
 
     public function testDecodeTokenWithShopkeeperUser(): void
     {
-        $userId = 2;
+        $userId = Str::uuid()->toString();
         $email = 'shopkeeper@example.com';
         $userType = UserTypeEnum::SHOPKEEPER;
         $now = time();
 
         $user = new UserEntity(
-            id: $userId,
+            id: new Identifier($userId),
             name: 'Shopkeeper User',
             email: $email,
             cpf: null,
@@ -209,12 +211,12 @@ final class AuthenticatorAdapterJWTTest extends TestCase
 
     public function testGetRemainingTime(): void
     {
-        $userId = 1;
+        $userId = Str::uuid()->toString();
         $email = 'test@example.com';
         $userType = UserTypeEnum::DEFAULT;
 
         $user = new UserEntity(
-            id: $userId,
+            id: new Identifier($userId),
             name: 'Test User',
             email: $email,
             cpf: null,

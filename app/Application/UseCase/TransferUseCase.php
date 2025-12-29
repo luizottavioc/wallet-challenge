@@ -13,6 +13,7 @@ use App\Application\Exception\UnauthorizedTransferException;
 use App\Domain\Contract\Repository\TransactionRepositoryInterface;
 use App\Domain\Contract\Repository\WalletRepositoryInterface;
 use App\Domain\Event\TransferCompletedEvent;
+use App\Domain\Exception\CannotPerformTransferForItselfException;
 use App\Domain\Exception\CannotSubtractAmountException;
 use App\Domain\Exception\InvalidValueObjectArgumentException;
 use App\Domain\Exception\CannotPerformTransferByInsufficientFundsException;
@@ -40,6 +41,7 @@ final readonly class TransferUseCase
      * @throws CannotSubtractAmountException
      * @throws CannotPerformTransferByInsufficientFundsException
      * @throws CannotPerformTransferByUserTypeException
+     * @throws CannotPerformTransferForItselfException
      */
     public function transfer(TransferInputDto $transferInputDto): TransferOutputDto
     {
@@ -59,6 +61,7 @@ final readonly class TransferUseCase
      * @throws CannotPerformTransferByInsufficientFundsException
      * @throws CannotPerformTransferByUserTypeException
      * @throws InvalidValueObjectArgumentException
+     * @throws CannotPerformTransferForItselfException
      */
     private function performTransfer($transferInputDto): TransferOutputDto
     {
