@@ -37,6 +37,22 @@ services:
     networks:
       - wallet-challenge
 
+  rabbitmq:
+    container_name: wallet-challenge-rabbitmq
+    image: rabbitmq:management
+    tty: true
+    restart: unless-stopped
+    volumes:
+      - .docker/rabbitmq:/var/lib/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${AMQP_USER}
+      RABBITMQ_DEFAULT_PASS: ${AMQP_PASSWORD}
+    ports:
+      - "5682:5672"
+      - "15682:15672"
+    networks:
+      - wallet-challenge
+
 networks:
   wallet-challenge:
     name: wallet-challenge

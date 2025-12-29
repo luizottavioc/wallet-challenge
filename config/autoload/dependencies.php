@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 use App\Application\Contract\AuthenticatorInterface;
 use App\Application\Contract\EventDispatcherInterface;
+use App\Application\Contract\NotifierInterface;
 use App\Application\Contract\TransactionManagerInterface;
 use App\Application\Contract\TransferAuthorizerInterface;
 use App\Domain\Contract\Repository\TransactionRepositoryInterface;
@@ -21,6 +22,7 @@ use App\Domain\Contract\Repository\WalletRepositoryInterface;
 use App\Domain\Contract\Service\PasswordHasherInterface;
 use App\Infrastructure\Adapter\AuthenticatorAdapterJWT;
 use App\Infrastructure\Adapter\EventDispatcherAdapterAmqp;
+use App\Infrastructure\Adapter\NotifierAdapterGuzzle;
 use App\Infrastructure\Adapter\PasswordHasherAdapterBcrypt;
 use App\Infrastructure\Adapter\TransactionManagerAdapterHyperf;
 use App\Infrastructure\Adapter\TransferAuthorizerAdapterGuzzle;
@@ -37,4 +39,5 @@ return [
     EventDispatcherInterface::class => EventDispatcherAdapterAmqp::class,
     WalletRepositoryInterface::class => WalletRepositoryEloquent::class,
     TransactionRepositoryInterface::class => TransactionRepositoryEloquent::class,
+    NotifierInterface::class => NotifierAdapterGuzzle::class
 ];

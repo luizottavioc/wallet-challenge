@@ -20,6 +20,7 @@ use App\Domain\Exception\CannotPerformTransferByUserTypeException;
 use App\Domain\Service\PerformTransactionDomainService;
 use App\Domain\Service\UpdateWalletByTransactionDomainService;
 use App\Domain\ValueObject\Money;
+use function Hyperf\Coroutine\co;
 
 final readonly class TransferUseCase
 {
@@ -47,30 +48,43 @@ final readonly class TransferUseCase
         }
 
         /* @var TransferOutputDto $transferOutputDto */
-        $transferOutputDto = $this->transactionManager->run(function () use ($transferInputDto): TransferOutputDto {
-            $walletPayer = $this->walletRepository->findByUserIdLocking($transferInputDto->payerId);
-            $walletPayee = $this->walletRepository->findByUserIdLocking($transferInputDto->payeeId);
-            $amount = new Money($transferInputDto->amount);
-
-            $transaction = $this->performTransactionDomainService->execute($walletPayer, $walletPayee, $amount);
-            $this->transactionRepository->save($transaction);
-
-            $newWalletPayer = $this->updateWalletByTransactionDomainService->execute($walletPayer, $transaction);
-            $this->walletRepository->save($newWalletPayer);
-
-            $newWalletPayee = $this->updateWalletByTransactionDomainService->execute($walletPayee, $transaction);
-            $this->walletRepository->save($newWalletPayee);
-
-            return new TransferOutputDto(
-                payerWallet: $newWalletPayer,
-                transaction: $transaction
-            );
-        });
-
-        $this->eventDispatcher->dispatch(
-            new TransferCompletedEvent($transferOutputDto->transaction->getId()->getValue())
-        );
+        $transferOutputDto = $this->transactionManager->run(fn() => $this->performTransfer($transferInputDto));
+        $this->dispatchTransferCompletedEvent($transferOutputDto->transaction->getId()->getValue());
 
         return $transferOutputDto;
+    }
+
+    /**
+     * @throws CannotSubtractAmountException
+     * @throws CannotPerformTransferByInsufficientFundsException
+     * @throws CannotPerformTransferByUserTypeException
+     * @throws InvalidValueObjectArgumentException
+     */
+    private function performTransfer($transferInputDto): TransferOutputDto
+    {
+        $walletPayer = $this->walletRepository->findByUserIdLocking($transferInputDto->payerId);
+        $walletPayee = $this->walletRepository->findByUserIdLocking($transferInputDto->payeeId);
+        $amount = new Money($transferInputDto->amount);
+
+        $transaction = $this->performTransactionDomainService->execute($walletPayer, $walletPayee, $amount);
+        $this->transactionRepository->save($transaction);
+
+        $newWalletPayer = $this->updateWalletByTransactionDomainService->execute($walletPayer, $transaction);
+        $this->walletRepository->save($newWalletPayer);
+
+        $newWalletPayee = $this->updateWalletByTransactionDomainService->execute($walletPayee, $transaction);
+        $this->walletRepository->save($newWalletPayee);
+
+        return new TransferOutputDto(
+            payerWallet: $newWalletPayer,
+            transaction: $transaction
+        );
+    }
+
+    private function dispatchTransferCompletedEvent(string $transactionId): void
+    {
+        co(fn() => $this->eventDispatcher->dispatch(
+            new TransferCompletedEvent($transactionId)
+        ));
     }
 }

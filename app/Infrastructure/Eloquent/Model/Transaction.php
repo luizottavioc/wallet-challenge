@@ -18,6 +18,8 @@ use Hyperf\DbConnection\Model\Model;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon|null $deleted_at
+ * @property User $payer
+ * @property User $payee
  */
 class Transaction extends Model
 {
@@ -49,8 +51,7 @@ class Transaction extends Model
         'payer_id' => 'string',
         'payee_id' => 'string',
         'amount' => 'integer',
-        'created_at' => 'timestamp',
-        'processed_at' => 'timestamp'
+        'processed_at' => 'datetime'
     ];
 
     protected string $keyType = 'string';

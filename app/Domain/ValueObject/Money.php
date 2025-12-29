@@ -53,4 +53,9 @@ readonly class Money
     {
         return new self($this->value + $amountToAdd->getValue());
     }
+
+    public function format(): string
+    {
+        return '$ ' . number_format($this->value / 100, 2, ',', '.');
+    }
 }

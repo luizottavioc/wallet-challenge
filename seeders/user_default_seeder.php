@@ -44,6 +44,6 @@ class UserDefaultSeeder extends Seeder
         echo "Default user created:\n";
         echo "- Email: $email\n";
         echo "- Password: $password\n";
-        echo "- Initial wallet amount: R$ " . $walletAmount / 100 . "\n";
+        echo "- Initial wallet amount: $ " . $walletAmount / 100 . "\n";
     }
 }

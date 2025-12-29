@@ -8,5 +8,6 @@ use App\Domain\Entity\TransactionEntity;
 
 interface TransactionRepositoryInterface
 {
+    public function findByTransactionId(string $transactionId): ?TransactionEntity;
     public function save(TransactionEntity $transactionEntity): void;
 }
